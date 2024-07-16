@@ -1,5 +1,7 @@
+import { Routes } from "./common/Routes";
+
 function App() {
-  return <>ok</>;
+  return <Routes />;
 }
 
 export default App;

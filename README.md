@@ -1,4 +1,4 @@
-## Projeto voltado pra estudo
+## Projeto voltado para estudo
 
 O Organograma V.2 visa ser superior a um projeto criado no inicio deste ano com mais funcinalidades e libs que auxiliaram no desenvolvimento.
 
