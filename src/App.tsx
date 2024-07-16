@@ -1,7 +1,12 @@
+import { ThemeProvider } from "./common/ContextTheme";
 import { Routes } from "./common/Routes";
 
 function App() {
-  return <Routes />;
+  return (
+    <ThemeProvider>
+      <Routes />
+    </ThemeProvider>
+  );
 }
 
 export default App;

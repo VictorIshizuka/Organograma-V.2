@@ -7,7 +7,7 @@ import { SignedRoutes } from "./signed";
 import { NotSignedRoutes } from "./not-signed";
 
 export const Routes = (): JSX.Element => {
-  const isSigned = true;
+  const isSigned = false;
   return (
     <BrowserRouter>
       <RoutesDomComponents>

@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import { BaseLayout } from "../Layout";
 import { useNavigate } from "react-router-dom";
 
-export function LoginPage() {
+export function ResetPasswordPage() {
   const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -18,17 +18,17 @@ export function LoginPage() {
   };
 
   return (
-    <BaseLayout title="Login">
+    <BaseLayout title="Definir nova senha">
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <Grid container>
           <TextField
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="E-mail"
-            name="email"
-            autoComplete="email"
+            id="code"
+            label="Código"
+            name="code"
+            autoComplete="code"
             autoFocus
           />
           <TextField
@@ -36,7 +36,17 @@ export function LoginPage() {
             required
             fullWidth
             name="password"
-            label="Senha"
+            label="Nova senha"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Confirmar nova senha"
             type="password"
             id="password"
             autoComplete="current-password"
@@ -47,13 +57,14 @@ export function LoginPage() {
                 href="#"
                 variant="body2"
                 sx={{
+                  fontSize: "13px",
                   textDecoration: "none",
                 }}
                 onClick={() => {
-                  navigate("forgot-password");
+                  navigate("/");
                 }}
               >
-                Esqueceu sua senha?
+                Voltar para página de login
               </Link>
             </Grid>
           </Grid>
@@ -63,21 +74,8 @@ export function LoginPage() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Entrar
+            Salvar
           </Button>
-          <Grid container justifyContent="center">
-            <Grid item>
-              <Link
-                href="#"
-                variant="body2"
-                sx={{
-                  textDecoration: "none",
-                }}
-              >
-                {"Não tem uma conta? Cadastre-se."}
-              </Link>
-            </Grid>
-          </Grid>
         </Grid>
       </Box>
     </BaseLayout>

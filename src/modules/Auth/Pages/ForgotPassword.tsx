@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import { BaseLayout } from "../Layout";
 import { useNavigate } from "react-router-dom";
 
-export function LoginPage() {
+export function ForgotPasswordPage() {
   const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -18,28 +18,17 @@ export function LoginPage() {
   };
 
   return (
-    <BaseLayout title="Login">
+    <BaseLayout title="Esqueceu sua senha">
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <Grid container>
           <TextField
             margin="normal"
             required
-            fullWidth
-            id="email"
             label="E-mail"
             name="email"
             autoComplete="email"
             autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
             fullWidth
-            name="password"
-            label="Senha"
-            type="password"
-            id="password"
-            autoComplete="current-password"
           />
           <Grid container justifyContent="end">
             <Grid item>
@@ -47,13 +36,14 @@ export function LoginPage() {
                 href="#"
                 variant="body2"
                 sx={{
+                  fontSize: "13px",
                   textDecoration: "none",
                 }}
                 onClick={() => {
-                  navigate("forgot-password");
+                  navigate("/");
                 }}
               >
-                Esqueceu sua senha?
+                Possui uma senha?
               </Link>
             </Grid>
           </Grid>
@@ -62,22 +52,12 @@ export function LoginPage() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            onClick={() => {
+              navigate("/reset-password");
+            }}
           >
-            Entrar
+            Enviar
           </Button>
-          <Grid container justifyContent="center">
-            <Grid item>
-              <Link
-                href="#"
-                variant="body2"
-                sx={{
-                  textDecoration: "none",
-                }}
-              >
-                {"Não tem uma conta? Cadastre-se."}
-              </Link>
-            </Grid>
-          </Grid>
         </Grid>
       </Box>
     </BaseLayout>
