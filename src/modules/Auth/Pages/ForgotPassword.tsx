@@ -1,20 +1,40 @@
-import Button from "@mui/material/Button";
+import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../hook";
+
+import { BaseLayout } from "../Layout";
+
+import { ForgotPasswordContext } from "@/modules/Collaborators/types";
+
+import { CircularProgress } from "@mui/material";
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { BaseLayout } from "../Layout";
-import { useNavigate } from "react-router-dom";
 
 export function ForgotPasswordPage() {
+  const { forgotPassword, isLoading } = useAuth();
   const navigate = useNavigate();
+
+  let attempt = 0;
+
+  const [isEmail, setEmail] = useState("");
+  const [disabled, setDisabled] = useState(false);
+
+  const attemptEmail = useCallback(() => {
+    attempt++;
+    if (attempt >= 3) setDisabled(true);
+  }, [attempt]);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    if (isEmail !== undefined) {
+      void forgotPassword(isEmail as unknown as ForgotPasswordContext);
+      setEmail("");
+    }
+    attemptEmail();
   };
 
   return (
@@ -25,7 +45,9 @@ export function ForgotPasswordPage() {
             margin="normal"
             required
             label="E-mail"
+            value={isEmail}
             name="email"
+            onChange={e => setEmail(e.target.value)}
             autoComplete="email"
             autoFocus
             fullWidth
@@ -36,7 +58,6 @@ export function ForgotPasswordPage() {
                 href="#"
                 variant="body2"
                 sx={{
-                  fontSize: "13px",
                   textDecoration: "none",
                 }}
                 onClick={() => {
@@ -51,12 +72,10 @@ export function ForgotPasswordPage() {
             type="submit"
             fullWidth
             variant="contained"
+            disabled={disabled}
             sx={{ mt: 3, mb: 2 }}
-            onClick={() => {
-              navigate("/reset-password");
-            }}
           >
-            Enviar
+            {isLoading ? <CircularProgress size={25} /> : "Enviar"}
           </Button>
         </Grid>
       </Box>
