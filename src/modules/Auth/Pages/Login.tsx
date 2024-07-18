@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../hook";
+import { useAuth } from "@/modules/auth/hook";
 
-import { BaseLayout } from "../Layout";
+import { BaseLayout } from "@/modules/auth/layout";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";

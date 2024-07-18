@@ -3,9 +3,9 @@ import { useCallback, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 
-import { useAuth } from "../hook";
+import { useAuth } from "@/modules/auth/hook";
 
-import { BaseLayout } from "../Layout";
+import { BaseLayout } from "@/modules/auth/layout";
 
 import { CircularProgress } from "@mui/material";
 import Button from "@mui/material/Button";

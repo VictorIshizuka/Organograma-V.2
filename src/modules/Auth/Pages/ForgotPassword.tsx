@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../hook";
+import { useAuth } from "@/modules/auth/hook";
 
-import { BaseLayout } from "../Layout";
+import { BaseLayout } from "@/modules/auth/layout";
 
-import { ForgotPasswordContext } from "@/modules/Collaborators/types";
+import { ForgotPasswordContext } from "@/modules/collaborator/types";
 
 import { CircularProgress } from "@mui/material";
 import TextField from "@mui/material/TextField";

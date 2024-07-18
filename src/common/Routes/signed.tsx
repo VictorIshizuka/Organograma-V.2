@@ -1,11 +1,15 @@
-import { ListCollaboratorsPage } from "@/modules/Collaborators/Pages/List";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { AppBarComponent } from "@/common/components/AppBar";
+import { ListCollaboratorsPage } from "@/modules/collaborator/pages/list";
 
 export const SignedRoutes = (): JSX.Element => {
   return (
-    <Routes>
-      <Route path="/" element={<ListCollaboratorsPage />} />
-      <Route path="/*" element={<Navigate replace to="/not-found" />} />
-    </Routes>
+    <>
+      <AppBarComponent />
+      <Routes>
+        <Route path="/" element={<ListCollaboratorsPage />} />
+        <Route path="/*" element={<Navigate replace to="/not-found" />} />
+      </Routes>
+    </>
   );
 };

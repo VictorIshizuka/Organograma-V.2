@@ -1,8 +1,10 @@
-import { ThemeProvider } from "./common/styles/ContextTheme";
-import { Routes } from "./common/Routes";
-import { AuthProvider } from "./modules/Auth/hook";
-import { SnackbarProvider } from "./common/styles/snackbar";
 import { BrowserRouter } from "react-router-dom";
+
+import { AuthProvider } from "@/modules/auth/hook";
+
+import { SnackbarProvider } from "@/common/styles/snackbar";
+import { ThemeProvider } from "@/common/styles/contextTheme";
+import { Routes } from "@/common/routes";
 
 function App() {
   return (
