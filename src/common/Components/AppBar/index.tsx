@@ -16,11 +16,14 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const pages = ["Admin"];
 
 export function AppBarComponent() {
   const { signOut } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -151,13 +154,15 @@ export function AppBarComponent() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Perfil</Typography>
-                <AccountCircleIcon
-                  fontSize="small"
-                  sx={{ marginLeft: "10px" }}
-                />
-              </MenuItem>
+              {location.pathname !== "/perfil" && (
+                <MenuItem onClick={() => navigate("/perfil")}>
+                  <Typography textAlign="center">Perfil</Typography>
+                  <AccountCircleIcon
+                    fontSize="small"
+                    sx={{ marginLeft: "10px" }}
+                  />
+                </MenuItem>
+              )}
               <MenuItem
                 onClick={() => {
                   signOut();

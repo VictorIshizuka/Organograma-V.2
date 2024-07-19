@@ -3,7 +3,6 @@ import {
   CollaboratorsTeam,
   TeamItem,
 } from "@/modules/collaborator/components/TeamItem";
-import { ButtonComponent } from "@/common/components/Button";
 
 const teams: CollaboratorsTeam[] = [
   {
@@ -113,9 +112,9 @@ const teams: CollaboratorsTeam[] = [
 export function ListCollaboratorsPage() {
   return (
     <Box margin={4}>
-      <Box paddingBottom={2}>
+      {/* <Box paddingBottom={2}>
         <ButtonComponent>Adicionar</ButtonComponent>
-      </Box>
+      </Box> */}
       <Paper>
         {teams.map((team, index) => {
           return (
