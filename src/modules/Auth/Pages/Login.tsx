@@ -39,10 +39,11 @@ export function LoginPage() {
   };
 
   return (
-    <BaseLayout title="Login">
+    <BaseLayout title="Login" wide>
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <Grid container>
           <TextField
+            margin="dense"
             required
             fullWidth
             label="E-mail"
@@ -63,7 +64,6 @@ export function LoginPage() {
             name="password"
             label="Senha"
             type="password"
-            autoComplete="current-password"
           />
           <Grid container justifyContent="end">
             <Grid item>
@@ -85,24 +85,23 @@ export function LoginPage() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 1.5, mb: 1 }}
           >
             {isLoading ? <CircularProgress size={25} /> : "Entrar"}
           </Button>
         </Grid>
       </Box>
-      <Grid container justifyContent="center">
-        <Grid item>
-          <Link
-            href="#"
-            variant="body2"
-            sx={{
-              textDecoration: "none",
-            }}
-          >
-            {"Não tem uma conta? Cadastre-se."}
-          </Link>
-        </Grid>
+      <Grid justifyContent="center">
+        <Link
+          href="#"
+          variant="body2"
+          onClick={() => navigate("/signup")}
+          sx={{
+            textDecoration: "none",
+          }}
+        >
+          {"Não tem uma conta? Cadastre-se."}
+        </Link>
       </Grid>
     </BaseLayout>
   );

@@ -20,7 +20,7 @@ import MenuItem from "@mui/material/MenuItem";
 const pages = ["Admin"];
 
 export function AppBarComponent() {
-  const { logout } = useAuth();
+  const { signOut } = useAuth();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -160,7 +160,7 @@ export function AppBarComponent() {
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  logout();
+                  signOut();
                 }}
               >
                 <Typography textAlign="center">Sair</Typography>

@@ -25,7 +25,7 @@ type AuthContextProps = AuthProps & {
   createSession: (params: CreateSessionContext) => void;
   forgotPassword: (params: ForgotPasswordContext) => void;
   resetPassword: (params: ResetPasswordContext) => void;
-  logout: () => void;
+  signOut: () => void;
   setStateSafety: (
     newData:
       | Partial<AuthProps>
@@ -160,7 +160,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [setStateSafety, enqueueSnackbar, attempts, navigate]
   );
 
-  const logout = useCallback(() => {
+  const signOut = useCallback(() => {
     navigate("/");
     setStateSafety({
       isLoggedUser: undefined,
@@ -173,7 +173,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         ...state,
-        logout,
+        signOut,
         createSession,
         forgotPassword,
         resetPassword,
