@@ -20,6 +20,8 @@ import {
   Select,
   styled,
 } from "@mui/material";
+import { v4 as uuid } from "uuid";
+import { teams } from "@/modules/collaborator/data";
 
 const Input = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -32,17 +34,18 @@ const Input = styled("input")({
 
 export function SignUpPage() {
   const navigate = useNavigate();
-  const { isLoading } = useAuth();
+  const { isLoading, signUp } = useAuth();
 
   const [imageBase64, setImageBase64] = useState<string>("");
   const [team, setTeam] = useState("");
   const [user, setUser] = useState<{
     name?: string;
     role?: string;
-    team?: string;
+    image?: string;
     email?: string;
     password?: string;
   }>();
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -55,19 +58,32 @@ export function SignUpPage() {
     }
   };
 
-  const listTeam = ["Programação", "Frontend"];
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (user?.password !== confirmPassword) {
+      return alert("erro senha");
+    }
 
-    if (user?.email !== undefined && user?.password !== undefined) {
+    if (
+      user?.name !== undefined &&
+      user?.email !== undefined &&
+      user?.password !== undefined &&
+      user?.role !== undefined
+    ) {
       const params = {
+        id: uuid(),
         ...user,
+        team,
         image: imageBase64,
       };
-      console.log(params);
-      // void createSession(params);
-      setUser({ email: "", password: "" });
+      void signUp(params);
+      setUser({
+        email: "",
+        password: "",
+        name: "",
+        role: "",
+        image: "",
+      });
     }
   };
 
@@ -108,16 +124,16 @@ export function SignUpPage() {
               <Select
                 value={team}
                 onChange={e => {
-                  return setTeam(e.target.value as unknown as string);
+                  return setTeam(e.target.value);
                 }}
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {listTeam.map((item, index) => {
+                {teams.map((item, index) => {
                   return (
-                    <MenuItem value={item} key={index}>
-                      {item}
+                    <MenuItem value={item.name} key={index}>
+                      {item.name}
                     </MenuItem>
                   );
                 })}
@@ -128,8 +144,8 @@ export function SignUpPage() {
             <TextField
               margin="dense"
               required
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setUser({ ...user, password: e.target.value });
+              onChange={e => {
+                setUser({ ...user, role: e.target.value });
               }}
               fullWidth
               name="role"
@@ -165,7 +181,7 @@ export function SignUpPage() {
             <TextField
               margin="dense"
               required
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              onChange={e => {
                 setUser({ ...user, password: e.target.value });
               }}
               fullWidth
@@ -178,8 +194,8 @@ export function SignUpPage() {
             <TextField
               margin="dense"
               required
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setUser({ ...user, password: e.target.value });
+              onChange={e => {
+                setConfirmPassword(e.target.value);
               }}
               fullWidth
               name="password"

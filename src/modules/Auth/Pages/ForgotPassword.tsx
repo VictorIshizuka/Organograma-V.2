@@ -5,8 +5,6 @@ import { useAuth } from "@/modules/auth/hook";
 
 import { BaseLayout } from "@/modules/auth/layout";
 
-import { ForgotPasswordContext } from "@/modules/collaborator/types";
-
 import { CircularProgress } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -31,14 +29,14 @@ export function ForgotPasswordPage() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isEmail !== undefined) {
-      void forgotPassword(isEmail as unknown as ForgotPasswordContext);
+      void forgotPassword(isEmail);
       setEmail("");
     }
     attemptEmail();
   };
 
   return (
-    <BaseLayout title="Esqueceu sua senha">
+    <BaseLayout title="Esqueceu sua senha" wide>
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <Grid container>
           <TextField

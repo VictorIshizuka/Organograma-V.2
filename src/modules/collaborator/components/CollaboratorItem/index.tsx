@@ -4,8 +4,10 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { Box, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useCollaborator } from "../../hook";
 
 export interface CollaboratorProps {
+  id: string;
   image?: string;
   role: string;
   name: string;
@@ -13,11 +15,14 @@ export interface CollaboratorProps {
 }
 
 export default function CollaboratorItem({
+  id,
   name,
   role,
   image,
   color,
 }: CollaboratorProps) {
+  const { collaboratorRemove } = useCollaborator();
+
   return (
     <Box
       height={210}
@@ -80,7 +85,10 @@ export default function CollaboratorItem({
               {role}
             </Box>
           </Typography>
-          <IconButton aria-label="delete">
+          <IconButton
+            aria-label="delete"
+            onClick={() => collaboratorRemove(id)}
+          >
             <DeleteIcon />
           </IconButton>
         </CardContent>

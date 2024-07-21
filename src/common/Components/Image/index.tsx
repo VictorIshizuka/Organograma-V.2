@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 interface ImageProps {
   image?: string;
-  name: string;
+  name?: string;
   sx?: SxProps;
 }
 

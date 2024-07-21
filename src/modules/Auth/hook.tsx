@@ -4,15 +4,16 @@ import { useSnackbar } from "notistack";
 
 import {
   CreateSessionContext,
-  ForgotPasswordContext,
   ResetPasswordContext,
-} from "@/modules/collaborator/types";
-import { CollaboratorModel } from "@/modules/collaborator/types/model";
+  SignUpContext,
+} from "@/modules/auth/types";
+import { CollaboratorsWithoutPasswordModel } from "@/modules/collaborator/types/model";
+import { collaborators } from "../collaborator/data";
 
 interface AuthProps {
   isLoading: boolean;
   isSigned: boolean;
-  isLoggedUser?: CollaboratorModel;
+  isLoggedUser?: CollaboratorsWithoutPasswordModel;
 }
 
 const INITIAL_STATE: AuthProps = {
@@ -23,7 +24,8 @@ const INITIAL_STATE: AuthProps = {
 
 type AuthContextProps = AuthProps & {
   createSession: (params: CreateSessionContext) => void;
-  forgotPassword: (params: ForgotPasswordContext) => void;
+  signUp: (params: SignUpContext) => void;
+  forgotPassword: (params: string) => void;
   resetPassword: (params: ResetPasswordContext) => void;
   signOut: () => void;
   setStateSafety: (
@@ -59,28 +61,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const createSession = useCallback(
     async (params: CreateSessionContext) => {
-      const user: CollaboratorModel = {
-        id: "1",
-        name: "Victor",
-        email: "victor@gmail.com",
-        image: undefined,
-        role: "Estudante",
-        team: "Frontend",
-        password: "12345",
-      };
-      const verifyUser = { email: user.email, password: "12345" };
       setStateSafety({ isLoading: true });
       try {
-        if (
-          verifyUser.email === params.email &&
-          verifyUser.password === user.password
-        ) {
+        const foundUser = collaborators.find(
+          collaborator =>
+            collaborator.email === params.email &&
+            collaborator.password === params.password
+        );
+        if (foundUser) {
           return setStateSafety({
             isSigned: true,
-            isLoggedUser: user,
+            isLoggedUser: foundUser,
+            isLoading: false,
           });
         }
-        setStateSafety({ isLoading: false });
         throw new Error("E-mail e/ou senha inválida");
       } catch (error) {
         setStateSafety({
@@ -96,12 +90,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const forgotPassword = useCallback(
-    (params: ForgotPasswordContext) => {
-      const isEmail = "victor@gmail.com";
+    (params: string) => {
       attempts++;
       setStateSafety({ isLoading: true });
       try {
-        if (params === isEmail) {
+        const foundUser = collaborators.find(
+          collaborator => collaborator.email === params
+        );
+
+        if (foundUser) {
           enqueueSnackbar("E-mail enviado com sucesso!!", {
             variant: "success",
           });
@@ -169,11 +166,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
   }, [navigate, setStateSafety]);
 
+  const signUp = useCallback(
+    (params: SignUpContext) => {
+      setStateSafety({ isLoading: true });
+
+      try {
+        collaborators.push(params);
+        setStateSafety({ isLoading: false, isSigned: true });
+        navigate("/");
+      } catch (error) {
+        setStateSafety({ isLoading: false });
+        console.log("erro em alguma coisa ");
+      }
+    },
+    [navigate, setStateSafety]
+  );
+
   return (
     <AuthContext.Provider
       value={{
         ...state,
         signOut,
+        signUp,
         createSession,
         forgotPassword,
         resetPassword,

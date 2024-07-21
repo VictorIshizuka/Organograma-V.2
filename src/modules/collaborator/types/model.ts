@@ -8,6 +8,12 @@ export interface CollaboratorModel {
   password: string;
 }
 
+export interface TeamModel {
+  id: string;
+  name: string;
+  color: string;
+}
+
 export interface CollaboratorsWithoutPasswordModel
   extends Omit<CollaboratorModel, "password"> {
   password?: string;

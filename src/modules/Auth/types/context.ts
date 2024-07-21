@@ -1,3 +1,5 @@
+import { CollaboratorModel } from "@/modules/collaborator/types";
+
 export interface CreateSessionContext {
   email: string;
   password: string;
@@ -12,3 +14,5 @@ export interface ResetPasswordContext {
   email: string;
   password: string;
 }
+
+export interface SignUpContext extends CollaboratorModel {}

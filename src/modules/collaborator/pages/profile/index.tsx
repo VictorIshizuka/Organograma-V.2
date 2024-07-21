@@ -1,5 +1,13 @@
+import { useEffect, useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "@/modules/auth/hook";
+
+import { ImageComponent } from "@/common/components/Image";
+import { teams } from "@/modules/collaborator/data";
+
 import {
-  Avatar,
   Box,
   Button,
   FormControl,
@@ -10,11 +18,11 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export const Profile = (): JSX.Element => {
-  const [imageBase64, setImageBase64] = useState<string>("");
+  const { isLoggedUser } = useAuth();
+
+  const [imageBase64, setImageBase64] = useState<string | undefined>("");
   const navigate = useNavigate();
   const [team, setTeam] = useState("");
   const [user, setUser] = useState<{
@@ -24,6 +32,7 @@ export const Profile = (): JSX.Element => {
     email?: string;
     password?: string;
   }>();
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -35,20 +44,21 @@ export const Profile = (): JSX.Element => {
       reader.readAsDataURL(file);
     }
   };
-  handleImageUpload;
-  const listTeam = ["Programação", "Frontend"];
+
+  useEffect(() => {
+    if (isLoggedUser) {
+      setUser({ ...isLoggedUser });
+      setTeam(isLoggedUser.team);
+      setImageBase64(isLoggedUser.image);
+    }
+  }, [isLoggedUser]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (user?.email !== undefined && user?.password !== undefined) {
-      const params = {
-        ...user,
-        image: imageBase64,
-      };
-      console.log(params);
-      // void createSession(params);
-      setUser({ email: "", password: "" });
+    if (user?.password === confirmPassword) {
+      console.log("ok");
+    } else {
+      alert("senhas devem ser iguais");
     }
   };
 
@@ -68,9 +78,16 @@ export const Profile = (): JSX.Element => {
         >
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <Grid container spacing={1}>
-              <Grid item xs={12} sm={12} display="flex" justifyContent="center">
-                <Avatar
-                  src="../../../auth/assets/bgInitialImage.jpg"
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                marginBottom={2}
+                display="flex"
+                justifyContent="center"
+              >
+                <ImageComponent
+                  image={imageBase64}
                   sx={{ width: 80, height: 80 }}
                 />
               </Grid>
@@ -78,6 +95,7 @@ export const Profile = (): JSX.Element => {
                 <TextField
                   required
                   fullWidth
+                  value={user?.name}
                   label="Nome"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setUser({ ...user, name: e.target.value });
@@ -89,6 +107,7 @@ export const Profile = (): JSX.Element => {
                 <TextField
                   required
                   fullWidth
+                  value={user?.email}
                   label="E-mail"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setUser({ ...user, email: e.target.value });
@@ -111,10 +130,10 @@ export const Profile = (): JSX.Element => {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    {listTeam.map((item, index) => {
+                    {teams.map((item, index) => {
                       return (
-                        <MenuItem value={item} key={index}>
-                          {item}
+                        <MenuItem value={item.name} key={index}>
+                          {item.name}
                         </MenuItem>
                       );
                     })}
@@ -124,6 +143,7 @@ export const Profile = (): JSX.Element => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
+                  value={user?.role}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setUser({ ...user, password: e.target.value });
                   }}
@@ -133,30 +153,6 @@ export const Profile = (): JSX.Element => {
                   type="text"
                 />
               </Grid>
-
-              {/* <Grid item xs={12} sm={6}>
-              <Button
-              component="label"
-              fullWidth
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-              >
-              Foto
-              <Input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              />
-              </Button>
-              </Grid> */}
-
-              {/* <Grid item xs={12} sm={6}>
-              <Avatar
-                src={imageBase64}
-                sizes="small"
-                sx={{ margin: "2px ", width: 50, height: 50 }}
-                />
-                </Grid> */}
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
@@ -173,7 +169,7 @@ export const Profile = (): JSX.Element => {
                 <TextField
                   required
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setUser({ ...user, password: e.target.value });
+                    setConfirmPassword(e.target.value);
                   }}
                   fullWidth
                   name="password"

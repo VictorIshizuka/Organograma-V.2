@@ -21,7 +21,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const pages = ["Admin"];
 
 export function AppBarComponent() {
-  const { signOut } = useAuth();
+  const { signOut, isLoggedUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -136,7 +136,10 @@ export function AppBarComponent() {
 
           <Box>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <ImageComponent image={undefined} name="" />
+              <ImageComponent
+                image={isLoggedUser?.image}
+                name={isLoggedUser?.name}
+              />
             </IconButton>
 
             <Menu
