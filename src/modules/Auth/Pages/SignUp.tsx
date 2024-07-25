@@ -20,7 +20,7 @@ import {
   Select,
   styled,
 } from "@mui/material";
-import { v4 as uuid } from "uuid";
+
 import { teams } from "@/modules/collaborator/data";
 
 const Input = styled("input")({
@@ -71,7 +71,6 @@ export function SignUpPage() {
       user?.role !== undefined
     ) {
       const params = {
-        id: uuid(),
         ...user,
         team,
         image: imageBase64,

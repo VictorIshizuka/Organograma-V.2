@@ -1,18 +1,14 @@
 import { CollaboratorModel } from "@/modules/collaborator/types";
+import {
+  CreateSessionService,
+  ForgotPasswordService,
+  ResetPasswordService,
+} from "./service";
 
-export interface CreateSessionHook {
-  email: string;
-  password: string;
-}
+export interface CreateSessionHook extends CreateSessionService {}
 
-export interface ForgotPasswordHook {
-  email: string;
-}
+export interface ForgotPasswordHook extends ForgotPasswordService {}
 
-export interface ResetPasswordHook {
-  code: string;
-  email: string;
-  password: string;
-}
+export interface ResetPasswordHook extends ResetPasswordService {}
 
 export interface SignUpHook extends CollaboratorModel {}
