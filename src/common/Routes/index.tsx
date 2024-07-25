@@ -13,7 +13,7 @@ export const Routes = (): JSX.Element => {
         path="/*"
         element={isSigned ? <SignedRoutes /> : <NotSignedRoutes />}
       />
-      <Route path="/not-found" element={<p>NOT FOUND</p>} />
+      <Route path="/not-found" element={<>NOT FOUND</>} />
     </RoutesDomComponents>
   );
 };

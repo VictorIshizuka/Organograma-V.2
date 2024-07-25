@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { useAuth } from "@/modules/auth/hook";
 
 import { ImageComponent } from "../Image";
@@ -17,19 +15,15 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { useLocation, useNavigate } from "react-router-dom";
-
-const pages = ["Admin"];
+import { useState } from "react";
 
 export function AppBarComponent() {
   const { signOut, isLoggedUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -68,7 +62,7 @@ export function AppBarComponent() {
             OrganoDev
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box flexGrow={1} display={{ xs: "flex", md: "none" }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -96,11 +90,9 @@ export function AppBarComponent() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map(page => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              <Button onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">Admin</Typography>
+              </Button>
             </Menu>
           </Box>
 
@@ -123,15 +115,12 @@ export function AppBarComponent() {
             OrganoDev
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map(page => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            <Button
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Admin
+            </Button>
           </Box>
 
           <Box>

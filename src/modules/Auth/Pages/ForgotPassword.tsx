@@ -29,14 +29,14 @@ export function ForgotPasswordPage() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isEmail !== undefined) {
-      void forgotPassword(isEmail);
+      void forgotPassword({ email: isEmail });
       setEmail("");
     }
     attemptEmail();
   };
 
   return (
-    <BaseLayout title="Esqueceu sua senha" wide>
+    <BaseLayout title="Esqueceu sua senha">
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <Grid container>
           <TextField

@@ -47,7 +47,7 @@ export const TeamItem = ({
                 role={collaborator.role}
                 image={collaborator.image}
                 color={color}
-                id={collaborator.id}
+                id={collaborator._id}
               />
             </Grid>
           ))}

@@ -1,14 +1,18 @@
 import { createContext, useCallback, useContext, useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 
 import {
-  CreateSessionContext,
-  ResetPasswordContext,
-  SignUpContext,
+  CreateSessionHook,
+  ForgotPasswordHook,
+  ResetPasswordHook,
+  SignUpHook,
 } from "@/modules/auth/types";
+
 import { CollaboratorsWithoutPasswordModel } from "@/modules/collaborator/types/model";
-import { collaborators } from "../collaborator/data";
+
+import { collaborators } from "@/modules/collaborator/data";
 
 interface AuthProps {
   isLoading: boolean;
@@ -18,32 +22,29 @@ interface AuthProps {
 
 const INITIAL_STATE: AuthProps = {
   isLoading: false,
-  isSigned: false,
+  isSigned: true,
   isLoggedUser: undefined,
 };
 
 type AuthContextProps = AuthProps & {
-  createSession: (params: CreateSessionContext) => void;
-  signUp: (params: SignUpContext) => void;
-  forgotPassword: (params: string) => void;
-  resetPassword: (params: ResetPasswordContext) => void;
+  createSession: (params: CreateSessionHook) => void;
+  signUp: (params: SignUpHook) => void;
+  forgotPassword: (params: ForgotPasswordHook) => void;
+  resetPassword: (params: ResetPasswordHook) => void;
   signOut: () => void;
-  setStateSafety: (
-    newData:
-      | Partial<AuthProps>
-      | ((newData: AuthProps) => Partial<AuthContextProps>)
-  ) => void;
 };
 
 const AuthContext = createContext(INITIAL_STATE as AuthContextProps);
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+
   let attempts = 0;
   const code = "1234";
 
   const [state, setState] = useState(() => {
-    const isSigned = INITIAL_STATE.isLoggedUser;
+    const isSigned = INITIAL_STATE.isSigned;
     if (isSigned !== undefined) return { ...INITIAL_STATE, isSigned: true };
     return { ...INITIAL_STATE, isSigned: false };
   });
@@ -60,7 +61,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const createSession = useCallback(
-    async (params: CreateSessionContext) => {
+    async (params: CreateSessionHook) => {
       setStateSafety({ isLoading: true });
       try {
         const foundUser = collaborators.find(
@@ -68,6 +69,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             collaborator.email === params.email &&
             collaborator.password === params.password
         );
+        console.log(foundUser);
         if (foundUser) {
           return setStateSafety({
             isSigned: true,
@@ -90,14 +92,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const forgotPassword = useCallback(
-    (params: string) => {
+    (params: ForgotPasswordHook) => {
       attempts++;
       setStateSafety({ isLoading: true });
       try {
         const foundUser = collaborators.find(
-          collaborator => collaborator.email === params
+          collaborator => collaborator.email === params.email
         );
-
         if (foundUser) {
           enqueueSnackbar("E-mail enviado com sucesso!!", {
             variant: "success",
@@ -126,7 +127,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [setStateSafety, attempts, enqueueSnackbar, navigate]
   );
   const resetPassword = useCallback(
-    (params: ResetPasswordContext) => {
+    (params: ResetPasswordHook) => {
       attempts++;
       setStateSafety({ isLoading: true });
       try {
@@ -167,7 +168,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [navigate, setStateSafety]);
 
   const signUp = useCallback(
-    (params: SignUpContext) => {
+    (params: SignUpHook) => {
       setStateSafety({ isLoading: true });
 
       try {
@@ -191,7 +192,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         createSession,
         forgotPassword,
         resetPassword,
-        setStateSafety,
       }}
     >
       {children}

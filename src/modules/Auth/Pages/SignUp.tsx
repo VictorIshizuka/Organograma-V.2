@@ -88,7 +88,7 @@ export function SignUpPage() {
   };
 
   return (
-    <BaseLayout title="Cadastre-se">
+    <BaseLayout title="Cadastre-se" wide>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <Grid container spacing={1}>
           <Grid item xs={12} sm={6}>

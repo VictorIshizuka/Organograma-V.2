@@ -17,7 +17,7 @@ export const ImageComponent = ({
   const [hasImage, setHasImage] = useState(image);
 
   useEffect(() => {
-    if (hasImage === undefined) return setHasImage(profileImage);
+    if (hasImage === null) return setHasImage(profileImage);
   }, [hasImage]);
 
   return <Avatar src={image} sx={sx} alt={name} />;

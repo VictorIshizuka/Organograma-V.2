@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import { Box, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useCollaborator } from "../../hook";
+import { CollaboratorRemoveHook } from "../../types";
 
 export interface CollaboratorProps {
   id: string;
@@ -87,7 +88,9 @@ export default function CollaboratorItem({
           </Typography>
           <IconButton
             aria-label="delete"
-            onClick={() => collaboratorRemove(id)}
+            onClick={() =>
+              collaboratorRemove(id as unknown as CollaboratorRemoveHook)
+            }
           >
             <DeleteIcon />
           </IconButton>

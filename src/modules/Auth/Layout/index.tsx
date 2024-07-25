@@ -1,34 +1,28 @@
 import { Copyright } from "@/common/components/Copyright";
 import { Box, Paper, Typography } from "@mui/material";
+import logo from "@/common/assets/logo.svg";
 
 export const BaseLayout = ({
   title,
   children,
-  wide = false,
+  wide,
 }: {
   title: string;
   wide?: boolean;
   children: React.ReactNode;
 }) => {
-  const logo = "../../../../public/chart-tree_5169456.svg";
   return (
     <Box
-      sx={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        backgroundColor: "#395ca3",
-        justifyContent: "center",
-        // backgroundImage: "url(../assets/bgInitialImage.jpg)",
-        // backgroundRepeat: "no-repeat",
-        // backgroundSize: "cover",
-        // backgroundPosition: "center",
-      }}
+      height="100vh"
+      display="flex"
+      alignItems="center"
+      bgcolor="#395ca3"
+      justifyContent="center"
     >
       <Paper
         sx={{
           padding: "5px 20px",
-          width: wide ? 350 : 620,
+          width: wide ? 650 : 350,
         }}
       >
         <Box

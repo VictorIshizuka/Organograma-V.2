@@ -1,11 +1,11 @@
 import { BrowserRouter } from "react-router-dom";
 
 import { AuthProvider } from "@/modules/auth/hook";
+import { CollaboratorProvider } from "@/modules/collaborator/hook";
 
 import { SnackbarProvider } from "@/common/styles/snackbar";
 import { ThemeProvider } from "@/common/styles/contextTheme";
 import { Routes } from "@/common/routes";
-import { CollaboratorProvider } from "./modules/collaborator/hook";
 
 function App() {
   return (

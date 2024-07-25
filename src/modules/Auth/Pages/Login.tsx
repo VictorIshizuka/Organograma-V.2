@@ -39,7 +39,7 @@ export function LoginPage() {
   };
 
   return (
-    <BaseLayout title="Login" wide>
+    <BaseLayout title="Login">
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <Grid container>
           <TextField

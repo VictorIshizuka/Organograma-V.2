@@ -3,23 +3,26 @@ import { createContext, useCallback, useContext, useState } from "react";
 import { useSnackbar } from "notistack";
 
 import { CollaboratorModel } from "@/modules/collaborator/types/model";
-import { collaborators } from "../collaborator/data";
-import { CollaboratorUpdateContext } from "./types";
+import { collaborators } from "@/modules/collaborator/data";
+import {
+  CollaboratorRemoveHook,
+  CollaboratorUpdateHook,
+} from "@/modules/collaborator/types";
 
-interface AuthProps {
+interface CollaboratorProps {
   isLoading: boolean;
   registers?: CollaboratorModel[];
 }
 
-const INITIAL_STATE: AuthProps = {
+const INITIAL_STATE: CollaboratorProps = {
   isLoading: false,
   registers: collaborators,
 };
 
-type UserContextProps = AuthProps & {
+type UserContextProps = CollaboratorProps & {
   collaboratorList: () => void;
-  collaboratorUpdate: (params: CollaboratorUpdateContext) => void;
-  collaboratorRemove: (id: string) => void;
+  collaboratorUpdate: (params: CollaboratorUpdateHook) => void;
+  collaboratorRemove: (_id: CollaboratorRemoveHook) => void;
 };
 
 const CollaboratorContext = createContext(INITIAL_STATE as UserContextProps);
@@ -30,13 +33,13 @@ export const CollaboratorProvider = ({
 }) => {
   const { enqueueSnackbar } = useSnackbar();
 
-  const [state, setState] = useState<AuthProps>(INITIAL_STATE);
+  const [state, setState] = useState<CollaboratorProps>(INITIAL_STATE);
 
   const setStateSafety = useCallback(
     (
       newData:
-        | Partial<AuthProps>
-        | ((newData: AuthProps) => Partial<UserContextProps>)
+        | Partial<CollaboratorProps>
+        | ((newData: CollaboratorProps) => Partial<UserContextProps>)
     ) => {
       setState(oldData => ({ ...oldData, ...newData }));
     },
@@ -44,7 +47,7 @@ export const CollaboratorProvider = ({
   );
 
   const collaboratorUpdate = useCallback(
-    async (params: CollaboratorUpdateContext) => {
+    async (params: CollaboratorUpdateHook) => {
       setStateSafety({ isLoading: true });
       try {
         const foundUser = collaborators.find(
@@ -70,15 +73,15 @@ export const CollaboratorProvider = ({
     [enqueueSnackbar, setStateSafety]
   );
   const collaboratorRemove = useCallback(
-    async (params: string) => {
+    async (params: CollaboratorRemoveHook) => {
       setStateSafety({ isLoading: true });
       try {
         const foundUser = collaborators.find(
-          collaborator => collaborator.id === params
+          collaborator => collaborator._id === params._id
         );
 
         if (foundUser) {
-          const list = collaborators.filter(item => item.id !== foundUser.id);
+          const list = collaborators.filter(item => item._id !== foundUser._id);
           setStateSafety({
             isLoading: false,
             registers: list,
