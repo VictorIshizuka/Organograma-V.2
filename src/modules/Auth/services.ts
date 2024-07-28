@@ -11,6 +11,7 @@ import {
 
 let attemptForgotPassword = 0;
 let attemptResetPassword = 0;
+
 export const createSessionService = (
   params: CreateSessionService
 ): CreateSessionServiceResult => {
@@ -46,8 +47,7 @@ export const resetPasswordService = (params: ResetPasswordService) => {
   );
   attemptResetPassword++;
   if (!foundCollaborator && params.code !== 123456) {
-    if (attemptResetPassword < 5)
-      throw new Error("Limite de 5 tentativas atingido");
+    if (attemptResetPassword < 5) throw new Error("Código inválido");
 
     if (attemptResetPassword === 5)
       throw new Error("Limite de 5 tentativas atingido");

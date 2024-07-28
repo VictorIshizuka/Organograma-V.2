@@ -22,6 +22,7 @@ export const BaseLayout = ({
       <Paper
         sx={{
           padding: "5px 20px",
+          margin: "10px",
           width: wide ? 650 : 350,
         }}
       >

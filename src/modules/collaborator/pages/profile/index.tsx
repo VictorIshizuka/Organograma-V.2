@@ -1,61 +1,43 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 import { useAuth } from "@/modules/auth/hook";
 
 import { ImageComponent } from "@/common/components/Image";
+
 import { teams } from "@/modules/collaborator/data";
 
-import {
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  TextField,
-} from "@mui/material";
+import { ProfileForm } from "@/modules/collaborator/types";
+
+import { Box, Button, Grid, Paper } from "@mui/material";
+
+import { FormTextField } from "@/common/components/Form/TextField";
+import { FormSelect } from "@/common/components/Form/Selector";
 
 export const Profile = (): JSX.Element => {
+  const { control, handleSubmit, watch, reset } = useForm<ProfileForm>();
+  const imageProfile = watch("image");
   const { isLoggedUser } = useAuth();
 
-  const [imageBase64, setImageBase64] = useState<string | undefined>("");
   const navigate = useNavigate();
-  const [team, setTeam] = useState("");
-  const [user, setUser] = useState<{
-    name?: string;
-    role?: string;
-    team?: string;
-    email?: string;
-    password?: string;
-  }>();
-  const [confirmPassword, setConfirmPassword] = useState("");
 
-  // const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setImageBase64(reader.result as string);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
-  console.log(isLoggedUser);
   useEffect(() => {
     if (isLoggedUser) {
-      setUser({ ...isLoggedUser });
-      setTeam(isLoggedUser.team);
-      setImageBase64(isLoggedUser.image);
+      reset({
+        ...isLoggedUser,
+        name: isLoggedUser.name,
+        email: isLoggedUser.email,
+        role: isLoggedUser.role,
+        team: isLoggedUser.team,
+        image: isLoggedUser.image,
+      });
     }
-  }, [isLoggedUser]);
+  }, [isLoggedUser, reset]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (user?.password === confirmPassword) {
+  const onSubmit = (params: ProfileForm) => {
+    if (params.password === params.confirmPassword) {
       console.log("ok");
     } else {
       alert("senhas devem ser iguais");
@@ -76,7 +58,11 @@ export const Profile = (): JSX.Element => {
             width: "600px",
           }}
         >
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{ mt: 1 }}
+          >
             <Grid container spacing={1}>
               <Grid
                 item
@@ -87,94 +73,67 @@ export const Profile = (): JSX.Element => {
                 justifyContent="center"
               >
                 <ImageComponent
-                  image={imageBase64}
+                  image={`https://github.com/${imageProfile}.png`}
                   sx={{ width: 80, height: 80 }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  value={user?.name}
+                <FormTextField
+                  control={control}
+                  name="name"
                   label="Nome"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setUser({ ...user, name: e.target.value });
-                  }}
+                  required
                   autoFocus
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  value={user?.email}
-                  label="E-mail"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setUser({ ...user, email: e.target.value });
-                  }}
+                <FormTextField
+                  control={control}
                   name="email"
-                  autoComplete="email"
-                  autoFocus
+                  label="E-mail"
+                  required
                 />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Time *</InputLabel>
-                  <Select
-                    value={team}
-                    onChange={e => {
-                      return setTeam(e.target.value as unknown as string);
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {teams.map((item, index) => {
-                      return (
-                        <MenuItem value={item.name} key={index}>
-                          {item.name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
+                <FormSelect
+                  control={control}
+                  name="team"
+                  label="Time"
+                  required
+                  options={teams.map(item => item.name)}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  value={user?.role}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setUser({ ...user, password: e.target.value });
-                  }}
-                  fullWidth
+                <FormTextField
+                  control={control}
                   name="role"
                   label="Cargo"
-                  type="text"
+                  required
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormTextField
+                  control={control}
+                  name="password"
+                  label="Senha"
+                  required
+                  inputProps={{
+                    type: "password",
+                    //   autoComplete: "password",
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setUser({ ...user, password: e.target.value });
-                  }}
-                  fullWidth
-                  name="password"
+                <FormTextField
+                  control={control}
+                  name="confirmPassword"
                   label="Confirmar senha"
-                  type="password"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
                   required
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setConfirmPassword(e.target.value);
+                  inputProps={{
+                    type: "password",
                   }}
-                  fullWidth
-                  name="password"
-                  label="Confirmar senha"
-                  type="password"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>

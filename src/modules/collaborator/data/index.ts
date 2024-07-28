@@ -115,7 +115,7 @@ export const collaborators: CollaboratorModel[] = [
     name: "Victor",
     email: "victor@gmail.com",
     role: "Estudante",
-    image: "https://github.com/VictorIshizuka.png",
+    image: "VictorIshizuka",
     team: "Programação",
     password: "12345",
     createdAt: "10/10/2023",

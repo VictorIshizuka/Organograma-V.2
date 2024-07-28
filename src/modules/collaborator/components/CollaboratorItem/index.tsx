@@ -24,6 +24,7 @@ export default function CollaboratorItem({
 }: CollaboratorProps) {
   const { collaboratorRemove } = useCollaborator();
 
+  console.log(image);
   return (
     <Box
       height={210}
@@ -42,7 +43,7 @@ export default function CollaboratorItem({
       >
         <ImageComponent
           name={name}
-          image={image}
+          image={`https://github.com/${image}.png`}
           sx={{
             width: "70px",
             height: "70px",

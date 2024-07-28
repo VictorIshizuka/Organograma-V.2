@@ -2,116 +2,110 @@ import { useCallback, useState } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import { useForm } from "react-hook-form";
 
 import { useAuth } from "@/modules/auth/hook";
 
+import { ResetPasswordForm } from "@/modules/auth/types/form";
+
 import { BaseLayout } from "@/modules/auth/layout";
 
-import { CircularProgress } from "@mui/material";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import { FormTextField } from "@/common/components/Form/TextField";
+import { FormConfirmButton } from "@/common/components/Form/ConfirmButton";
 
 export function ResetPasswordPage() {
+  const { control, handleSubmit } = useForm<ResetPasswordForm>();
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoading, resetPassword } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
-
-  const [code, setCode] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
 
   const [disabled, setDisabled] = useState(false);
 
   let attempt = 0;
   const attemptEmail = useCallback(() => {
     attempt++;
-    if (attempt >= 3) setDisabled(true);
+    if (attempt === 5) setDisabled(true);
   }, [attempt]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (password === passwordConfirm) {
-      if (code) {
-        void resetPassword({ code, password, email: location.state });
-        setCode("");
-        setPassword("");
-        setPasswordConfirm("");
-      }
+  const onSubmit = (params: ResetPasswordForm) => {
+    if (params.password === params.confirmPassword) {
+      void resetPassword({ ...params, email: location.state });
+
       attemptEmail();
-    } else {
-      enqueueSnackbar("Senhas devem ser iguais", { variant: "warning" });
+      return;
     }
+    enqueueSnackbar("Senhas devem ser iguais", { variant: "warning" });
   };
 
   return (
     <BaseLayout title="Definir nova senha">
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        sx={{ mt: 1 }}
+      >
         <Grid container>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            value={code}
-            id="code"
-            label="Código"
-            name="code"
-            autoComplete="code"
-            onChange={e => setCode(e.target.value)}
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            value={password}
-            fullWidth
-            name="password"
-            label="Nova senha"
-            onChange={e => setPassword(e.target.value)}
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            value={passwordConfirm}
-            onChange={e => setPasswordConfirm(e.target.value)}
-            name="password"
-            label="Confirmar nova senha"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <Grid container justifyContent="end">
-            <Grid item>
-              <Link
-                href="#"
-                variant="body2"
-                sx={{
-                  textDecoration: "none",
-                }}
-                onClick={() => {
-                  navigate("/");
-                }}
-              >
-                Voltar para página de login
-              </Link>
-            </Grid>
+          <Grid item xs={12} sm={12}>
+            <FormTextField
+              control={control}
+              name="code"
+              label="Código"
+              required
+              autoFocus
+            />
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            disabled={disabled}
-            sx={{ mt: 3, mb: 2 }}
+          <Grid item xs={12} sm={12}>
+            <FormTextField
+              control={control}
+              name="password"
+              label="Nova senha"
+              required
+              inputProps={{
+                type: "password",
+                autoComplete: "password",
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <FormTextField
+              control={control}
+              name="confirmPassword"
+              label="Confirmar nova senha"
+              required
+              inputProps={{
+                type: "password",
+                autoComplete: "password",
+              }}
+            />
+          </Grid>
+
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            sx={{ display: "flex", justifyContent: "end" }}
           >
-            {isLoading ? <CircularProgress size={25} /> : "Salvar"}
-          </Button>
+            <Link
+              href="#"
+              variant="body2"
+              sx={{
+                textDecoration: "none",
+              }}
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Voltar para página de login
+            </Link>
+          </Grid>
+          <FormConfirmButton disabled={disabled} loading={isLoading}>
+            Salvar
+          </FormConfirmButton>
         </Grid>
       </Box>
     </BaseLayout>

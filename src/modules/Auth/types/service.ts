@@ -1,4 +1,4 @@
-import { CollaboratorsWithoutPasswordModel } from "@/modules/collaborator/types";
+import { CollaboratorWithoutPasswordModel } from "@/modules/collaborator/types";
 
 export interface CreateSessionService {
   email: string;
@@ -6,7 +6,7 @@ export interface CreateSessionService {
 }
 
 export interface CreateSessionServiceResult {
-  collaborator: CollaboratorsWithoutPasswordModel;
+  collaborator: CollaboratorWithoutPasswordModel;
   //token:string
 }
 

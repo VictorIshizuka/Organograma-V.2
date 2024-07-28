@@ -126,7 +126,7 @@ export function AppBarComponent() {
           <Box>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <ImageComponent
-                image={isLoggedUser?.image}
+                image={`https://github.com/${isLoggedUser?.image}.png`}
                 name={isLoggedUser?.name}
               />
             </IconButton>

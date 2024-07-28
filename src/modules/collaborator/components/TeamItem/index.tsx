@@ -1,11 +1,11 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { CollaboratorsWithoutPasswordModel } from "../../types";
+import { CollaboratorWithoutPasswordModel } from "../../types";
 import CollaboratorItem from "../CollaboratorItem";
 import hexToRgba from "hex-to-rgba";
 
 export interface CollaboratorsTeam {
   id: string;
-  collaborators?: CollaboratorsWithoutPasswordModel[];
+  collaborators?: CollaboratorWithoutPasswordModel[];
   name: string;
   color: string;
 }

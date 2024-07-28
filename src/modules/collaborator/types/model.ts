@@ -16,7 +16,7 @@ export interface TeamModel {
   color: string;
 }
 
-export interface CollaboratorsWithoutPasswordModel
+export interface CollaboratorWithoutPasswordModel
   extends Omit<CollaboratorModel, "password"> {
-  password?: string;
+  //password?: string;
 }

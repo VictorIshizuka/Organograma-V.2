@@ -10,7 +10,7 @@ import {
   SignUpHook,
 } from "@/modules/auth/types";
 
-import { CollaboratorsWithoutPasswordModel } from "@/modules/collaborator/types/model";
+import { CollaboratorWithoutPasswordModel } from "@/modules/collaborator/types/model";
 
 import {
   createSessionService,
@@ -23,7 +23,7 @@ import { ErrorApp } from "@/common/types/erro";
 interface AuthProps {
   isLoading: boolean;
   isSigned: boolean;
-  isLoggedUser?: CollaboratorsWithoutPasswordModel;
+  isLoggedUser?: CollaboratorWithoutPasswordModel;
 }
 
 const INITIAL_STATE: AuthProps = {
