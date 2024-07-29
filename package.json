@@ -10,19 +10,23 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@hookform/resolvers": "^3.9.0",
-    "@mui/icons-material": "^5.16.1",
-    "@mui/material": "^5.16.1",
-    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "@mui/icons-material": "^5.16.4",
+    "@mui/material": "^5.16.4",
+    "@mui/styled-engine": "^5.16.4",
+    "json-server": "^1.0.0-beta.1",
+    "notistack": "^3.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.1",
     "react-router-dom": "^6.24.1",
-    "styled-components": "^6.1.11",
     "uuid": "^10.0.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@types/json-server": "^0.14.7",
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
