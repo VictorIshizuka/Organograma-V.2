@@ -1,4 +1,4 @@
-import { AuthRoutes } from "@/modules/Auth/Routes";
+import { AuthRoutes } from "@/modules/auth/routes";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 export const NotSignedRoutes = (): JSX.Element => {

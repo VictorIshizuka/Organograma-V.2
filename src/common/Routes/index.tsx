@@ -1,7 +1,6 @@
 import { Route, Routes as RoutesDomComponents } from "react-router-dom";
 
-import { useAuth } from "@/modules/Auth/hook";
-
+import { useAuth } from "@/modules/auth/hook";
 import { SignedRoutes } from "./signed";
 import { NotSignedRoutes } from "./not-signed";
 

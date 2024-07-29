@@ -1,13 +1,13 @@
 import { createContext, useCallback, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
-import { CollaboratorModel } from "../Collaborators/types/model";
 import {
   CreateSessionContext,
   ForgotPasswordContext,
   ResetPasswordContext,
-} from "../Collaborators/types";
-import { useSnackbar } from "notistack";
-import { useNavigate } from "react-router-dom";
+} from "@/modules/collaborator/types";
+import { CollaboratorModel } from "@/modules/collaborator/types/model";
 
 interface AuthProps {
   isLoading: boolean;
@@ -60,13 +60,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const createSession = useCallback(
     async (params: CreateSessionContext) => {
       const user: CollaboratorModel = {
-        id: 1,
-        uuid: "1234567890",
+        id: "1",
         name: "Victor",
         email: "victor@gmail.com",
-        image: null,
+        image: undefined,
         role: "Estudante",
-        team: ["Frontend"],
+        team: "Frontend",
         password: "12345",
       };
       const verifyUser = { email: user.email, password: "12345" };

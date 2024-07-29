@@ -1,4 +1,4 @@
-import { Copyright } from "@/common/Components/Copyright";
+import { Copyright } from "@/common/components/Copyright";
 import { Box, Container, Paper, Typography } from "@mui/material";
 
 export const BaseLayout = ({
