@@ -1,18 +1,29 @@
 import { createContext, useCallback, useContext, useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 
 import {
-  CreateSessionContext,
-  ForgotPasswordContext,
-  ResetPasswordContext,
-} from "@/modules/collaborator/types";
-import { CollaboratorModel } from "@/modules/collaborator/types/model";
+  CreateSessionHook,
+  ForgotPasswordHook,
+  ResetPasswordHook,
+  SignUpHook,
+} from "@/modules/auth/types";
+
+import { CollaboratorWithoutPasswordModel } from "@/modules/collaborator/types/model";
+
+import {
+  createSessionService,
+  forgotPasswordService,
+  resetPasswordService,
+  signUpService,
+} from "./services";
+import { ErrorApp } from "@/common/types/erro";
 
 interface AuthProps {
   isLoading: boolean;
   isSigned: boolean;
-  isLoggedUser?: CollaboratorModel;
+  isLoggedUser?: CollaboratorWithoutPasswordModel;
 }
 
 const INITIAL_STATE: AuthProps = {
@@ -22,27 +33,22 @@ const INITIAL_STATE: AuthProps = {
 };
 
 type AuthContextProps = AuthProps & {
-  createSession: (params: CreateSessionContext) => void;
-  forgotPassword: (params: ForgotPasswordContext) => void;
-  resetPassword: (params: ResetPasswordContext) => void;
-  logout: () => void;
-  setStateSafety: (
-    newData:
-      | Partial<AuthProps>
-      | ((newData: AuthProps) => Partial<AuthContextProps>)
-  ) => void;
+  createSession: (params: CreateSessionHook) => void;
+  signUp: (params: SignUpHook) => void;
+  forgotPassword: (params: ForgotPasswordHook) => void;
+  resetPassword: (params: ResetPasswordHook) => void;
+  signOut: () => void;
 };
 
 const AuthContext = createContext(INITIAL_STATE as AuthContextProps);
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  let attempts = 0;
-  const code = "1234";
 
   const [state, setState] = useState(() => {
-    const isSigned = INITIAL_STATE.isLoggedUser;
-    if (isSigned !== undefined) return { ...INITIAL_STATE, isSigned: true };
+    const isSigned = INITIAL_STATE.isSigned;
+    if (isSigned !== undefined) return { ...INITIAL_STATE, isSigned: false };
     return { ...INITIAL_STATE, isSigned: false };
   });
 
@@ -58,36 +64,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const createSession = useCallback(
-    async (params: CreateSessionContext) => {
-      const user: CollaboratorModel = {
-        id: "1",
-        name: "Victor",
-        email: "victor@gmail.com",
-        image: undefined,
-        role: "Estudante",
-        team: "Frontend",
-        password: "12345",
-      };
-      const verifyUser = { email: user.email, password: "12345" };
+    async (params: CreateSessionHook) => {
       setStateSafety({ isLoading: true });
       try {
-        if (
-          verifyUser.email === params.email &&
-          verifyUser.password === user.password
-        ) {
-          return setStateSafety({
-            isSigned: true,
-            isLoggedUser: user,
-          });
-        }
-        setStateSafety({ isLoading: false });
-        throw new Error("E-mail e/ou senha inválida");
-      } catch (error) {
+        const result = createSessionService(params);
         setStateSafety({
-          isSigned: false,
+          isSigned: true,
+          isLoggedUser: result.collaborator,
           isLoading: false,
         });
-        enqueueSnackbar("E-mail e/ou senha inválida", {
+      } catch (error) {
+        const errorApp = error as ErrorApp;
+        setStateSafety({
+          isLoading: false,
+        });
+        enqueueSnackbar(errorApp.message, {
           variant: "warning",
         });
       }
@@ -96,71 +87,50 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const forgotPassword = useCallback(
-    (params: ForgotPasswordContext) => {
-      const isEmail = "victor@gmail.com";
-      attempts++;
+    (params: ForgotPasswordHook) => {
       setStateSafety({ isLoading: true });
       try {
-        if (params === isEmail) {
-          enqueueSnackbar("E-mail enviado com sucesso!!", {
-            variant: "success",
-          });
-          setTimeout(() => {
-            enqueueSnackbar("Código: 1234", { variant: "success" });
-          }, 2000);
-          navigate("/reset-password", { state: params });
-          setStateSafety({ isLoading: false });
-
-          return;
-        }
-        attempts < 3 &&
-          enqueueSnackbar("E-email inválido", {
-            variant: "warning",
-          });
-
-        if (attempts === 3) throw new Error("Limite de 3 tentativas atingido");
-      } catch (error) {
+        const resCodeTest = forgotPasswordService(params);
+        enqueueSnackbar("E-mail enviado com sucesso!!", {
+          variant: "success",
+        });
+        enqueueSnackbar(`Código: ${resCodeTest}`, {
+          variant: "success",
+        });
+        navigate("/reset-password", { state: params });
         setStateSafety({ isLoading: false });
-        enqueueSnackbar("Limite de 3 tentativas atingido", {
+      } catch (error) {
+        const errorApp = error as ErrorApp;
+
+        setStateSafety({ isLoading: false });
+        enqueueSnackbar(errorApp.message, {
           variant: "warning",
         });
       }
     },
-    [setStateSafety, attempts, enqueueSnackbar, navigate]
+    [setStateSafety, enqueueSnackbar, navigate]
   );
   const resetPassword = useCallback(
-    (params: ResetPasswordContext) => {
-      attempts++;
+    (params: ResetPasswordHook) => {
       setStateSafety({ isLoading: true });
       try {
-        if (params.code === code) {
-          setTimeout(() => {
-            enqueueSnackbar("Senha alterada com sucesso!!", {
-              variant: "success",
-            });
-            navigate("/");
-            setStateSafety({ isSigned: true, isLoading: false });
-          }, 2000);
-          return;
-        }
-        if (attempts < 5) {
-          enqueueSnackbar("Código inválido", {
-            variant: "warning",
-          });
-          return setStateSafety({ isLoading: false });
-        }
-        if (attempts === 5) throw new Error("Limite de 5 tentativas atingido");
+        resetPasswordService(params);
+        enqueueSnackbar("Senha alterada com sucesso!!", {
+          variant: "success",
+        });
+        navigate("/");
       } catch (error) {
+        const errorApp = error as ErrorApp;
         setStateSafety({ isLoading: false });
-        enqueueSnackbar("Limite de 5 tentativas atingido", {
+        enqueueSnackbar(errorApp.message, {
           variant: "warning",
         });
       }
     },
-    [setStateSafety, enqueueSnackbar, attempts, navigate]
+    [setStateSafety, enqueueSnackbar, navigate]
   );
 
-  const logout = useCallback(() => {
+  const signOut = useCallback(() => {
     navigate("/");
     setStateSafety({
       isLoggedUser: undefined,
@@ -169,15 +139,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
   }, [navigate, setStateSafety]);
 
+  const signUp = useCallback(
+    (params: SignUpHook) => {
+      setStateSafety({ isLoading: true });
+      try {
+        signUpService(params);
+        navigate("/");
+        setStateSafety({ isLoading: false });
+      } catch (error) {
+        const errorApp = error as ErrorApp;
+        setStateSafety({ isLoading: false });
+        enqueueSnackbar(errorApp.message, {
+          variant: "warning",
+        });
+      }
+    },
+    [enqueueSnackbar, navigate, setStateSafety]
+  );
+
   return (
     <AuthContext.Provider
       value={{
         ...state,
-        logout,
+        signOut,
+        signUp,
         createSession,
         forgotPassword,
         resetPassword,
-        setStateSafety,
       }}
     >
       {children}

@@ -1,6 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 
 import { AuthProvider } from "@/modules/auth/hook";
+import { CollaboratorProvider } from "@/modules/collaborator/hook";
 
 import { SnackbarProvider } from "@/common/styles/snackbar";
 import { ThemeProvider } from "@/common/styles/contextTheme";
@@ -12,7 +13,9 @@ function App() {
       <ThemeProvider>
         <SnackbarProvider>
           <AuthProvider>
-            <Routes />
+            <CollaboratorProvider>
+              <Routes />
+            </CollaboratorProvider>
           </AuthProvider>
         </SnackbarProvider>
       </ThemeProvider>

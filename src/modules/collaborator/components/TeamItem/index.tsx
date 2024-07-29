@@ -1,11 +1,11 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { CollaboratorsWithoutPasswordModel } from "../../types";
+import { CollaboratorWithoutPasswordModel } from "../../types";
 import CollaboratorItem from "../CollaboratorItem";
 import hexToRgba from "hex-to-rgba";
 
 export interface CollaboratorsTeam {
   id: string;
-  collaborators: CollaboratorsWithoutPasswordModel[];
+  collaborators?: CollaboratorWithoutPasswordModel[];
   name: string;
   color: string;
 }
@@ -16,7 +16,7 @@ export const TeamItem = ({
   color,
 }: CollaboratorsTeam): JSX.Element | boolean => {
   return (
-    collaborators.length > 0 && (
+    collaborators!.length > 0 && (
       <Box
         bgcolor={hexToRgba(color, 0.8)}
         flexDirection="column"
@@ -39,7 +39,7 @@ export const TeamItem = ({
           </Typography>
         </Box>
         <Grid container columnSpacing={2} columns={{ xs: 8, sm: 12, md: 12 }}>
-          {collaborators.map((collaborator, index) => (
+          {collaborators?.map((collaborator, index) => (
             <Grid item xs={4} sm={4} md={2.4} key={index}>
               <CollaboratorItem
                 key={index}
@@ -47,6 +47,7 @@ export const TeamItem = ({
                 role={collaborator.role}
                 image={collaborator.image}
                 color={color}
+                id={collaborator._id}
               />
             </Grid>
           ))}

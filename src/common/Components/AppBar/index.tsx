@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { useAuth } from "@/modules/auth/hook";
 
 import { ImageComponent } from "../Image";
@@ -16,17 +14,16 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-
-const pages = ["Admin"];
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export function AppBarComponent() {
-  const { logout } = useAuth();
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const { signOut, isLoggedUser } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -65,7 +62,7 @@ export function AppBarComponent() {
             OrganoDev
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box flexGrow={1} display={{ xs: "flex", md: "none" }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -93,11 +90,9 @@ export function AppBarComponent() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map(page => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              <Button onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">Admin</Typography>
+              </Button>
             </Menu>
           </Box>
 
@@ -120,20 +115,20 @@ export function AppBarComponent() {
             OrganoDev
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map(page => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            <Button
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Admin
+            </Button>
           </Box>
 
           <Box>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <ImageComponent image={undefined} name="" />
+              <ImageComponent
+                image={`https://github.com/${isLoggedUser?.image}.png`}
+                name={isLoggedUser?.name}
+              />
             </IconButton>
 
             <Menu
@@ -151,16 +146,18 @@ export function AppBarComponent() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Perfil</Typography>
-                <AccountCircleIcon
-                  fontSize="small"
-                  sx={{ marginLeft: "10px" }}
-                />
-              </MenuItem>
+              {location.pathname !== "/perfil" && (
+                <MenuItem onClick={() => navigate("/perfil")}>
+                  <Typography textAlign="center">Perfil</Typography>
+                  <AccountCircleIcon
+                    fontSize="small"
+                    sx={{ marginLeft: "10px" }}
+                  />
+                </MenuItem>
+              )}
               <MenuItem
                 onClick={() => {
-                  logout();
+                  signOut();
                 }}
               >
                 <Typography textAlign="center">Sair</Typography>
