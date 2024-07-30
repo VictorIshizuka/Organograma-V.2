@@ -66,6 +66,7 @@ export const FormSelect = <Model extends FieldValues>({
             </Box>
           </InputLabel>
           <Select
+            value={field.value || ""}
             onChange={(_event, newValue) =>
               handleChange(newValue as string, field.onChange)
             }

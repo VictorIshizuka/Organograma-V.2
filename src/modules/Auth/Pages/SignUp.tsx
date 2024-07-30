@@ -29,7 +29,6 @@ export function SignUpPage() {
 
   const onSubmit = (params: SignUpForm) => {
     if (params.password === params.confirmPassword) {
-      console.log(params);
       void signUp(params);
       return;
     }

@@ -18,7 +18,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export function AppBarComponent() {
-  const { signOut, isLoggedUser } = useAuth();
+  const { signOut, isLoggedUser, setStateSafety, admin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -116,7 +116,11 @@ export function AppBarComponent() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Button
-              onClick={handleCloseNavMenu}
+              onClick={() =>
+                admin
+                  ? setStateSafety({ admin: false })
+                  : setStateSafety({ admin: true })
+              }
               sx={{ my: 2, color: "white", display: "block" }}
             >
               Admin

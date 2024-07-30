@@ -22,6 +22,7 @@ import { ErrorApp } from "@/common/types/erro";
 
 interface AuthProps {
   isLoading: boolean;
+  admin: boolean;
   isSigned: boolean;
   isLoggedUser?: CollaboratorWithoutPasswordModel;
 }
@@ -29,6 +30,7 @@ interface AuthProps {
 const INITIAL_STATE: AuthProps = {
   isLoading: false,
   isSigned: false,
+  admin: false,
   isLoggedUser: undefined,
 };
 
@@ -37,6 +39,11 @@ type AuthContextProps = AuthProps & {
   signUp: (params: SignUpHook) => void;
   forgotPassword: (params: ForgotPasswordHook) => void;
   resetPassword: (params: ResetPasswordHook) => void;
+  setStateSafety: (
+    newData:
+      | Partial<AuthProps>
+      | ((newData: AuthProps) => Partial<AuthContextProps>)
+  ) => void;
   signOut: () => void;
 };
 
@@ -162,6 +169,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         ...state,
         signOut,
+        setStateSafety,
         signUp,
         createSession,
         forgotPassword,

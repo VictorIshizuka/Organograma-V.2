@@ -8,7 +8,7 @@ export const SignedRoutes = (): JSX.Element => {
     <>
       <AppBarComponent />
       <Routes>
-        <Route path="/" element={<ListCollaboratorsPage />} />
+        <Route path="/*" element={<ListCollaboratorsPage />} />
         <Route path="/perfil" element={<Profile />} />
         <Route path="/*" element={<Navigate replace to="/not-found" />} />
       </Routes>
