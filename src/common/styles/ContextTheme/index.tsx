@@ -13,7 +13,7 @@ export function ThemeProvider({
 
   const theme = createTheme({
     palette: {
-      background: { default: "#EBEFF2" },
+      background: { default: "#F3EEEE" },
       primary: {
         main: PRIMARY_COLOR,
       },

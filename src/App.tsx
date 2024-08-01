@@ -1,24 +1,26 @@
 import { BrowserRouter } from "react-router-dom";
 
 import { AuthProvider } from "@/modules/auth/hook";
+
 import { CollaboratorProvider } from "@/modules/collaborator/hook";
 
-import { SnackbarProvider } from "@/common/styles/snackbar";
-import { ThemeProvider } from "@/common/styles/contextTheme";
 import { Routes } from "@/common/routes";
+
+import { SnackbarProvider } from "@/common/styles/snackbar";
+import { GlobalStyles } from "@/common/styles/globalStyles";
 
 function App() {
   return (
     <BrowserRouter>
-      <ThemeProvider>
-        <SnackbarProvider>
-          <AuthProvider>
-            <CollaboratorProvider>
+      <SnackbarProvider>
+        <AuthProvider>
+          <CollaboratorProvider>
+            <GlobalStyles>
               <Routes />
-            </CollaboratorProvider>
-          </AuthProvider>
-        </SnackbarProvider>
-      </ThemeProvider>
+            </GlobalStyles>
+          </CollaboratorProvider>
+        </AuthProvider>
+      </SnackbarProvider>
     </BrowserRouter>
   );
 }

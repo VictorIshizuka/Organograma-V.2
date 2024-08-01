@@ -1,12 +1,14 @@
+import { useAuth } from "@/modules/auth/hook";
+import { useCollaborator } from "@/modules/collaborator/hook";
+
+import { CollaboratorRemoveHook } from "@/modules/collaborator/types";
+
 import { ImageComponent } from "@/common/components/Image";
 
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
 import { Box, IconButton } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useCollaborator } from "../../hook";
-import { CollaboratorRemoveHook } from "../../types";
-import { useAuth } from "@/modules/auth/hook";
+import CardContent from "@mui/material/CardContent";
 
 export interface CollaboratorProps {
   id: string;

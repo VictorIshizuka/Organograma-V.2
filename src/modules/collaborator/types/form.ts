@@ -2,8 +2,8 @@ export interface ProfileForm {
   name: string;
   email: string;
   role: string;
-  image: string;
+  photo?: string;
   team: string;
-  password: string;
-  confirmPassword: string;
+  password?: string;
+  confirmPassword?: string;
 }

@@ -1,7 +1,10 @@
-import { Box, Grid, Typography } from "@mui/material";
-import { CollaboratorWithoutPasswordModel } from "../../types";
-import CollaboratorItem from "../CollaboratorItem";
 import hexToRgba from "hex-to-rgba";
+
+import { CollaboratorWithoutPasswordModel } from "@/modules/collaborator/types";
+
+import CollaboratorItem from "@/modules/collaborator/components/CollaboratorItem";
+
+import { Box, Grid, Typography } from "@mui/material";
 
 export interface CollaboratorsTeam {
   id: string;
@@ -45,7 +48,7 @@ export const TeamItem = ({
                 key={index}
                 name={collaborator.name}
                 role={collaborator.role}
-                image={collaborator.image}
+                image={collaborator.photo}
                 color={color}
                 id={collaborator._id}
               />

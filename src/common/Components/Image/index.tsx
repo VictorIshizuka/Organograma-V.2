@@ -1,5 +1,6 @@
-import { Avatar, SxProps } from "@mui/material";
 import { useEffect, useState } from "react";
+
+import { Avatar, SxProps } from "@mui/material";
 
 interface ImageProps {
   image?: string;

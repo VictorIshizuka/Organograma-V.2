@@ -1,3 +1,7 @@
+import { useCallback } from "react";
+
+import { Control, Controller, FieldValues, Path } from "react-hook-form";
+
 import {
   Box,
   FormControl,
@@ -5,10 +9,9 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import { useCallback } from "react";
-import { Control, Controller, FieldValues, Path } from "react-hook-form";
 
 interface FormSelectProps<Model extends FieldValues> {
   name: Path<Model>;
@@ -29,16 +32,19 @@ export const FormSelect = <Model extends FieldValues>({
   control,
   required,
   options,
-  inputBox,
+  inputBox = "outlined",
   label,
   onChange,
   disabled,
   error,
 }: FormSelectProps<Model>) => {
   const handleChange = useCallback(
-    (newValue: string | null, fieldOnChange: (param?: string) => void) => {
+    (e: SelectChangeEvent, fieldOnChange: (param?: string) => void) => {
+      const newValue = e.target.value as string;
       fieldOnChange(newValue as string);
-      if (onChange) onChange(newValue);
+      if (onChange) {
+        onChange(newValue);
+      }
     },
     [onChange]
   );
@@ -51,7 +57,7 @@ export const FormSelect = <Model extends FieldValues>({
         <FormControl
           error={!!error}
           fullWidth
-          variant={inputBox ?? "outlined"}
+          variant={inputBox}
           disabled={disabled}
           {...field}
         >
@@ -66,10 +72,8 @@ export const FormSelect = <Model extends FieldValues>({
             </Box>
           </InputLabel>
           <Select
-            value={field.value || ""}
-            onChange={(_event, newValue) =>
-              handleChange(newValue as string, field.onChange)
-            }
+            onChange={event => handleChange(event, field.onChange)}
+            value={field.value ?? ""}
           >
             <MenuItem value="">
               <em>None</em>

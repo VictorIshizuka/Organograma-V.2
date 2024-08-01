@@ -1,27 +1,38 @@
 import { useEffect } from "react";
 
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { useAuth } from "@/modules/auth/hook";
-
-import { ImageComponent } from "@/common/components/Image";
 
 import { teams } from "@/modules/collaborator/data";
 
 import { ProfileForm } from "@/modules/collaborator/types";
 
-import { Box, Button, Grid, Paper } from "@mui/material";
+import { Box, Grid, Paper } from "@mui/material";
 
-import { FormTextField } from "@/common/components/Form/TextField";
-import { FormSelect } from "@/common/components/Form/Selector";
+import {
+  FormSelect,
+  FormCancelButton,
+  FormConfirmButton,
+  FormTextField,
+} from "@/common/components/Form";
+import { ImageComponent } from "@/common/components/Image";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { profileValidations } from "../../validations";
 
 export const Profile = (): JSX.Element => {
-  const { control, handleSubmit, watch, reset } = useForm<ProfileForm>();
-  const imageProfile = watch("image");
-  const { isLoggedUser } = useAuth();
+  const {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<ProfileForm>({
+    resolver: yupResolver(profileValidations),
+  });
+  const imageProfile = watch("photo");
 
-  const navigate = useNavigate();
+  const { isLoggedUser, isLoading } = useAuth();
 
   useEffect(() => {
     if (isLoggedUser) {
@@ -31,26 +42,21 @@ export const Profile = (): JSX.Element => {
         email: isLoggedUser.email,
         role: isLoggedUser.role,
         team: isLoggedUser.team,
-        image: isLoggedUser.image,
+        photo: isLoggedUser.photo,
         password: "",
       });
     }
   }, [isLoggedUser, reset]);
 
   const onSubmit = (params: ProfileForm) => {
-    if (params.password === params.confirmPassword) {
-      console.log("ok");
-    } else {
-      alert("senhas devem ser iguais");
-    }
+    console.log("ok", params);
   };
 
   return (
-    // <Box height="100vh" bgcolor="#f3eeee">
-    <Box padding={4} bgcolor={"#f3eeee"} display="flex" justifyContent="center">
+    <Box padding={4} display="flex" justifyContent="center">
       <Paper
         sx={{
-          padding: 3,
+          padding: 2,
           width: "600px",
         }}
       >
@@ -74,6 +80,7 @@ export const Profile = (): JSX.Element => {
                 control={control}
                 name="name"
                 label="Nome"
+                error={errors?.name?.message}
                 required
                 autoFocus
               />
@@ -84,6 +91,7 @@ export const Profile = (): JSX.Element => {
                 name="email"
                 label="E-mail"
                 required
+                error={errors?.email?.message}
               />
             </Grid>
 
@@ -101,6 +109,7 @@ export const Profile = (): JSX.Element => {
                 control={control}
                 name="role"
                 label="Cargo"
+                error={errors?.role?.message}
                 required
               />
             </Grid>
@@ -110,6 +119,7 @@ export const Profile = (): JSX.Element => {
                 control={control}
                 name="password"
                 label="Senha"
+                error={errors?.password?.message}
                 required
                 inputProps={{
                   type: "password",
@@ -123,35 +133,21 @@ export const Profile = (): JSX.Element => {
                 name="confirmPassword"
                 label="Confirmar senha"
                 required
+                error={errors?.confirmPassword?.message}
                 inputProps={{
                   type: "password",
                 }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 2, mb: 2 }}
-              >
-                Salvar
-              </Button>
+              <FormConfirmButton loading={isLoading}>Salvar</FormConfirmButton>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Button
-                fullWidth
-                variant="outlined"
-                sx={{ mt: 2, mb: 2 }}
-                onClick={() => navigate(-1)}
-              >
-                Cancelar
-              </Button>
+              <FormCancelButton>Cancelar</FormCancelButton>
             </Grid>
           </Grid>
         </Box>
       </Paper>
     </Box>
-    //</Box>
   );
 };

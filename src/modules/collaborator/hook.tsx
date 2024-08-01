@@ -2,11 +2,12 @@ import { createContext, useCallback, useContext, useState } from "react";
 
 import { useSnackbar } from "notistack";
 
-import { CollaboratorModel } from "@/modules/collaborator/types/model";
 import { collaborators } from "@/modules/collaborator/data";
+
 import {
   CollaboratorRemoveHook,
   CollaboratorUpdateHook,
+  CollaboratorModel,
 } from "@/modules/collaborator/types";
 
 interface CollaboratorProps {
@@ -22,7 +23,7 @@ const INITIAL_STATE: CollaboratorProps = {
 type UserContextProps = CollaboratorProps & {
   collaboratorList: () => void;
   collaboratorUpdate: (params: CollaboratorUpdateHook) => void;
-  collaboratorRemove: (_id: CollaboratorRemoveHook) => void;
+  collaboratorRemove: (params: CollaboratorRemoveHook) => void;
 };
 
 const CollaboratorContext = createContext(INITIAL_STATE as UserContextProps);
@@ -76,25 +77,16 @@ export const CollaboratorProvider = ({
     async (params: CollaboratorRemoveHook) => {
       setStateSafety({ isLoading: true });
       try {
-        const foundUser = collaborators.find(
-          collaborator => collaborator._id === params._id
-        );
-
-        if (foundUser) {
-          const list = collaborators.filter(item => item._id !== foundUser._id);
-          setStateSafety({
-            isLoading: false,
-            registers: list,
-          });
-        }
-        //   throw new Error("E-mail e/ou senha inválida");
+        const list = collaborators.filter(item => item._id !== params._id);
+        console.log(list);
+        setStateSafety({
+          isLoading: false,
+          registers: list,
+        });
       } catch (error) {
         setStateSafety({
           isLoading: false,
         });
-        // enqueueSnackbar("E-mail e/ou senha inválida", {
-        //   variant: "warning",
-        // });
       }
     },
     [setStateSafety]
