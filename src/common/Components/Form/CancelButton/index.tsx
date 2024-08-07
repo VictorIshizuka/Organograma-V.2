@@ -1,5 +1,6 @@
 import { CircularProgress } from "@mui/material";
 import { Button, ButtonProps } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 interface FormButtonProps {
   buttonProps?: ButtonProps;
@@ -10,17 +11,19 @@ interface FormButtonProps {
   startIcon?: JSX.Element;
 }
 
-export const FormConfirmButton = ({
+export const FormCancelButton = ({
   children,
   loading,
   ...rest
 }: FormButtonProps) => {
+  const navigate = useNavigate();
   return (
     <Button
       {...rest}
-      type="submit"
+      onClick={() => navigate(-1)}
       fullWidth
-      variant="contained"
+      variant="outlined"
+      color="error"
       sx={{ marginY: 1 }}
     >
       {loading ? <CircularProgress size={25} /> : children}

@@ -1,6 +1,3 @@
-import { Box } from "@mui/material";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import {
   FieldValues,
   Control,
@@ -8,6 +5,10 @@ import {
   Path,
   PathValue,
 } from "react-hook-form";
+
+import { Box } from "@mui/material";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 interface FormTextFieldProps<Model extends FieldValues> {
   control: Control<Model>;

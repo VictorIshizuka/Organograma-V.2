@@ -1,23 +1,30 @@
 import { useCallback, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useAuth } from "@/modules/auth/hook";
 
-import { BaseLayout } from "@/modules/auth/layout";
-
 import { ForgotPasswordForm } from "@/modules/auth/types/form";
 
-import { FormTextField } from "@/common/components/Form/TextField";
-import { FormConfirmButton } from "@/common/components/Form/ConfirmButton";
+import { forgotPasswordValidations } from "@/modules/auth/validations";
 
+import { BaseLayout } from "@/modules/auth/layout";
+import { FormTextField, FormConfirmButton } from "@/common/components/Form";
+
+import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 
 export function ForgotPasswordPage() {
-  const { control, handleSubmit } = useForm<ForgotPasswordForm>();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgotPasswordForm>({
+    resolver: yupResolver(forgotPasswordValidations),
+  });
 
   const { forgotPassword, isLoading } = useAuth();
   const navigate = useNavigate();
@@ -52,10 +59,10 @@ export function ForgotPasswordPage() {
               label="E-mail"
               name="email"
               required
+              error={errors?.email?.message}
               autoFocus
             />
           </Grid>
-
           <Grid
             item
             xs={12}

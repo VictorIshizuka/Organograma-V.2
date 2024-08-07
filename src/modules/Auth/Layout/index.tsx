@@ -1,6 +1,7 @@
 import { Copyright } from "@/common/components/Copyright";
-import { Box, Paper, Typography } from "@mui/material";
 import logo from "@/common/assets/logo.svg";
+
+import { Box, Paper, Typography } from "@mui/material";
 
 export const BaseLayout = ({
   title,

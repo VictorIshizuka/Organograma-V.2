@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.16.4",
     "@mui/material": "^5.16.4",
     "@mui/styled-engine": "^5.16.4",
+    "axios": "^1.7.2",
     "hex-to-rgba": "^2.0.1",
     "json-server": "^1.0.0-beta.1",
     "notistack": "^3.0.1",

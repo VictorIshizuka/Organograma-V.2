@@ -1,20 +1,28 @@
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useAuth } from "@/modules/auth/hook";
 
 import { CreateSessionHook } from "@/modules/auth/types";
-import { FormConfirmButton } from "@/common/components/Form/ConfirmButton";
 
-import { FormTextField } from "@/common/components/Form/TextField";
+import { loginValidations } from "@/modules/auth/validations";
+
 import { BaseLayout } from "@/modules/auth/layout";
+import { FormTextField, FormConfirmButton } from "@/common/components/Form";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 
 export function LoginPage() {
-  const { control, handleSubmit } = useForm<CreateSessionHook>({});
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreateSessionHook>({
+    resolver: yupResolver(loginValidations),
+  });
 
   const navigate = useNavigate();
   const { createSession, isLoading } = useAuth();
@@ -37,6 +45,7 @@ export function LoginPage() {
               control={control}
               name="email"
               label="E-mail"
+              error={errors?.email?.message}
               required
               autoFocus
             />
@@ -46,6 +55,7 @@ export function LoginPage() {
               control={control}
               name="password"
               label="Senha"
+              error={errors?.password?.message}
               required
               inputProps={{
                 type: "password",

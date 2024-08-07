@@ -1,17 +1,23 @@
-import {
-  CreateSessionService,
-  ForgotPasswordService,
-  ResetPasswordService,
-  SignUpService,
-} from "./service";
+export interface CreateSessionForm {
+  email: string;
+  password: string;
+}
 
-export interface CreateSessionForm extends CreateSessionService {}
+export interface ForgotPasswordForm {
+  email: string;
+}
 
-export interface ForgotPasswordForm extends ForgotPasswordService {}
-
-export interface ResetPasswordForm extends ResetPasswordService {
+export interface ResetPasswordForm {
+  code: string;
+  password: string;
   confirmPassword: string;
 }
-export interface SignUpForm extends SignUpService {
+export interface SignUpForm {
+  name: string;
+  email: string;
+  photo?: string;
+  role: string;
+  team: string;
+  password: string;
   confirmPassword: string;
 }

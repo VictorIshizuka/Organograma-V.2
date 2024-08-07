@@ -1,11 +1,12 @@
+import { useAuth } from "@/modules/auth/hook";
+import { useCollaborator } from "@/modules/collaborator/hook";
+
 import { ImageComponent } from "@/common/components/Image";
 
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
 import { Box, IconButton } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useCollaborator } from "../../hook";
-import { CollaboratorRemoveHook } from "../../types";
+import CardContent from "@mui/material/CardContent";
 
 export interface CollaboratorProps {
   id: string;
@@ -23,8 +24,8 @@ export default function CollaboratorItem({
   color,
 }: CollaboratorProps) {
   const { collaboratorRemove } = useCollaborator();
+  const { admin } = useAuth();
 
-  console.log(image);
   return (
     <Box
       height={210}
@@ -87,14 +88,18 @@ export default function CollaboratorItem({
               {role}
             </Box>
           </Typography>
-          <IconButton
-            aria-label="delete"
-            onClick={() =>
-              collaboratorRemove(id as unknown as CollaboratorRemoveHook)
-            }
-          >
-            <DeleteIcon />
-          </IconButton>
+          {admin && (
+            <IconButton
+              aria-label="delete"
+              onClick={() => {
+                collaboratorRemove({
+                  _id: id,
+                });
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
         </CardContent>
       </Box>
     </Box>

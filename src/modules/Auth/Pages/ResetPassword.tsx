@@ -1,27 +1,33 @@
 import { useCallback, useState } from "react";
 
-import { useLocation, useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/modules/auth/hook";
 
 import { ResetPasswordForm } from "@/modules/auth/types/form";
 
-import { BaseLayout } from "@/modules/auth/layout";
+import { resetPasswordValidations } from "@/modules/auth/validations";
 
+import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import { FormTextField } from "@/common/components/Form/TextField";
-import { FormConfirmButton } from "@/common/components/Form/ConfirmButton";
+
+import { BaseLayout } from "@/modules/auth/layout";
+import { FormTextField, FormConfirmButton } from "@/common/components/Form";
 
 export function ResetPasswordPage() {
-  const { control, handleSubmit } = useForm<ResetPasswordForm>();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ResetPasswordForm>({
+    resolver: yupResolver(resetPasswordValidations),
+  });
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoading, resetPassword } = useAuth();
-  const { enqueueSnackbar } = useSnackbar();
 
   const [disabled, setDisabled] = useState(false);
 
@@ -32,13 +38,13 @@ export function ResetPasswordPage() {
   }, [attempt]);
 
   const onSubmit = (params: ResetPasswordForm) => {
-    if (params.password === params.confirmPassword) {
-      void resetPassword({ ...params, email: location.state });
+    void resetPassword({
+      ...params,
+      code: Number(params.code),
+      email: location.state!,
+    });
 
-      attemptEmail();
-      return;
-    }
-    enqueueSnackbar("Senhas devem ser iguais", { variant: "warning" });
+    attemptEmail();
   };
 
   return (
@@ -49,13 +55,14 @@ export function ResetPasswordPage() {
         noValidate
         sx={{ mt: 1 }}
       >
-        <Grid container>
+        <Grid container spacing={1}>
           <Grid item xs={12} sm={12}>
             <FormTextField
               control={control}
               name="code"
               label="Código"
               required
+              error={errors?.code?.message}
               autoFocus
             />
           </Grid>
@@ -64,6 +71,7 @@ export function ResetPasswordPage() {
               control={control}
               name="password"
               label="Nova senha"
+              error={errors?.password?.message}
               required
               inputProps={{
                 type: "password",
@@ -76,6 +84,7 @@ export function ResetPasswordPage() {
               control={control}
               name="confirmPassword"
               label="Confirmar nova senha"
+              error={errors?.confirmPassword?.message}
               required
               inputProps={{
                 type: "password",

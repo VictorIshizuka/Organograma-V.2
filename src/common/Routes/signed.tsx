@@ -6,12 +6,13 @@ import { Profile } from "@/modules/collaborator/pages/profile";
 export const SignedRoutes = (): JSX.Element => {
   return (
     <>
-      <AppBarComponent />
-      <Routes>
-        <Route path="/" element={<ListCollaboratorsPage />} />
-        <Route path="/perfil" element={<Profile />} />
-        <Route path="/*" element={<Navigate replace to="/not-found" />} />
-      </Routes>
+      <AppBarComponent>
+        <Routes>
+          <Route path="/*" element={<ListCollaboratorsPage />} />
+          <Route path="/perfil" element={<Profile />} />
+          <Route path="/*" element={<Navigate replace to="/not-found" />} />
+        </Routes>
+      </AppBarComponent>
     </>
   );
 };

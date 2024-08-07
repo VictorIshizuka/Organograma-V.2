@@ -23,7 +23,7 @@ export interface ResetPasswordService {
 export interface SignUpService {
   name: string;
   email: string;
-  image?: string;
+  photo?: string;
   role: string;
   team: string;
   password: string;
