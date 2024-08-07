@@ -1,8 +1,6 @@
 import { useAuth } from "@/modules/auth/hook";
 import { useCollaborator } from "@/modules/collaborator/hook";
 
-import { CollaboratorRemoveHook } from "@/modules/collaborator/types";
-
 import { ImageComponent } from "@/common/components/Image";
 
 import { Box, IconButton } from "@mui/material";
@@ -93,9 +91,11 @@ export default function CollaboratorItem({
           {admin && (
             <IconButton
               aria-label="delete"
-              onClick={() =>
-                collaboratorRemove(id as unknown as CollaboratorRemoveHook)
-              }
+              onClick={() => {
+                collaboratorRemove({
+                  _id: id,
+                });
+              }}
             >
               <DeleteIcon />
             </IconButton>

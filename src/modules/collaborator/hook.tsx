@@ -76,14 +76,23 @@ export const CollaboratorProvider = ({
   const collaboratorRemove = useCallback(
     async (params: CollaboratorRemoveHook) => {
       setStateSafety({ isLoading: true });
+
       try {
-        const list = collaborators.filter(item => item._id !== params._id);
-        console.log(list);
-        setStateSafety({
-          isLoading: false,
-          registers: list,
-        });
+        const foundUser = collaborators.find(item => item._id === params._id);
+
+        if (foundUser) {
+          const list = collaborators.filter(item => item._id !== foundUser._id);
+
+          setStateSafety({
+            isLoading: false,
+            registers: list,
+          });
+        } else {
+          console.log("User not found");
+          setStateSafety({ isLoading: false });
+        }
       } catch (error) {
+        console.error("Error:", error);
         setStateSafety({
           isLoading: false,
         });
